@@ -59,27 +59,27 @@ data Broker'
 data Dict'
 {#pointer *EnchantDict as Dict -> Dict' #}
 
--- | Returns the Enchant version.
+-- | Return the Enchant version.
 {#fun unsafe enchant_get_version as getVersion {} -> `String' peekUTF8String*#}
 
--- | Creates a new broker object.
+-- | Create a new broker object.
 {#fun unsafe enchant_broker_init as brokerInit {} -> `Broker' id#}
 
--- | Frees a broker resource with all its dictionaries.
+-- | Free a broker resource with all its dictionaries.
 {#fun unsafe enchant_broker_free as brokerFree {id `Broker'} -> `()'#}
 
--- | Creates a new dictionary using tag, the non-empty language tag you wish
+-- | Create a new dictionary using tag, the non-empty language tag you wish
 -- to request a dictionary for ("en_US", "de_DE", ...)
 {#fun unsafe enchant_broker_request_dict as brokerRequestDict {id `Broker', withUTF8String* `String'} -> `Dict' id#}
 
--- | Creates a dictionary using a PWL file. A PWL file is personal word file
+-- | Create a dictionary using a PWL file. A PWL file is personal word file
 -- one word per line.
 {#fun unsafe enchant_broker_request_pwl_dict as brokerRequestPwlDict {id `Broker', withUTF8String* `String'} -> `Dict' id#}
 
--- | Frees a dictionary resource.
+-- | Free a dictionary resource.
 {#fun unsafe enchant_broker_free_dict as brokerFreeDict {id `Broker', id `Dict'} -> `()'#}
 
--- | Tells if a dictionary exists or not, using a non-empty tags.
+-- | Tell if a dictionary exists or not, using a non-empty tags.
 {#fun unsafe enchant_broker_dict_exists as brokerDictExists {id `Broker', withUTF8String* `String'} -> `Bool'#}
 
 -- | @brokerSetOrdering tag ordering@ declares a preference of dictionaries to
@@ -89,7 +89,7 @@ data Dict'
 -- does not explicitly declare an ordering.
 {#fun unsafe enchant_broker_set_ordering as brokerSetOrdering {id `Broker', withUTF8String* `String', withUTF8String* `String'} -> `()'#}
 
--- | Returns the last error which occurred in this broker.
+-- | Return the last error which occurred in this broker.
 {#fun unsafe enchant_broker_get_error as brokerGetError {id `Broker'} -> `String' peekUTF8String*#}
 
 {#fun unsafe enchant_broker_get_param as brokerGetParam {id `Broker', withUTF8String* `String'} -> `String' peekUTF8String*#}
@@ -112,7 +112,7 @@ data Provider = Provider
   , providerDllName :: String -- ^ The DLL/SO where this dict's provider was loaded from in Glib file encoding
   } deriving (Eq, Show)
 
--- | Enumerates the Enchant providers and tells you some rudimentary information about them.
+-- | Enumerate the Enchant providers and tells you some rudimentary information about them.
 brokerDescribe :: Broker -> IO [Provider]
 brokerDescribe b = do
   acc <- newIORef []
@@ -127,27 +127,27 @@ brokerDescribe b = do
 withUTF8StringLenIntConv :: Num n => String -> ((CString, n) -> IO a) -> IO a
 withUTF8StringLenIntConv s f = withUTF8StringLen s $ \(p, n) -> f (p, fromIntegral n)
 
--- | Checks whether a word is correctly spelled or not.
+-- | Check whether a word is correctly spelled or not.
 {#fun unsafe enchant_dict_check as dictCheck {id `Dict', withUTF8StringLenIntConv* `String'&} -> `Bool'#}
 
--- | Adds a word to the given dictionary.
+-- | Add a word to the given dictionary.
 {#fun unsafe enchant_dict_add as dictAdd {id `Dict', withUTF8StringLenIntConv* `String'&} -> `()'#}
 
--- | Adds a word to the given dictionary. It will be added only for the active
+-- | Add a word to the given dictionary. It will be added only for the active
 -- spell-checking session.
 {#fun unsafe enchant_dict_add_to_session as dictAddToSession {id `Dict', withUTF8StringLenIntConv* `String'&} -> `()'#}
 
--- | Removes the word from the given dictionary.
+-- | Remove the word from the given dictionary.
 {#fun unsafe enchant_dict_remove as dictRemove {id `Dict', withUTF8StringLenIntConv* `String'&} -> `()'#}
 
--- | Removes the word from the given dictionary. It will be only removed from
+-- | Remove the word from the given dictionary. It will be only removed from
 -- the active spell-checking session.
 {#fun unsafe enchant_dict_remove_from_session as dictRemoveFromSession {id `Dict', withUTF8StringLenIntConv* `String'&} -> `()'#}
 
--- | Returns true if the word is added to the given dictionary.
+-- | Return true if the word is added to the given dictionary.
 {#fun unsafe enchant_dict_is_added as dictIsAdded {id `Dict', withUTF8StringLenIntConv* `String'&} -> `Bool'#}
 
--- | Returns true if the word is removed from the given dictionary.
+-- | Return true if the word is removed from the given dictionary.
 {#fun unsafe enchant_dict_is_removed as dictIsRemoved {id `Dict', withUTF8StringLenIntConv* `String'&} -> `Bool'#}
 
 -- | @dictStoreReplacement dict mis cor@ adds a correction for @mis@ using @cor@.
@@ -169,7 +169,7 @@ dictSuggest d s = bracket (_dictSuggest d s) cleanup go
       mapM peekUTF8String cs
     cleanup (p, _) = _dictFreeStringList d p
 
--- | Returns the last error of the current spelling-session.
+-- | Return the last error of the current spelling-session.
 {#fun unsafe enchant_dict_get_error as dictGetError {id `Dict'} -> `String' peekUTF8String*#}
 
 type DictDescribeFn = CString -> CString -> CString -> CString -> Ptr () -> IO ()
@@ -181,7 +181,7 @@ withDictDescribeFn f a = createDictDescriberFn f >>= a
 
 {#fun enchant_dict_describe as _dictDescribe {id `Dict', withDictDescribeFn* `DictDescribeFn', id `Ptr ()'} -> `()'#}
 
--- | Returns the details of the dictionary.
+-- | Return the details of the dictionary.
 dictDescribe :: Dict -> IO [Provider]
 dictDescribe d = do
   acc <- newIORef []
@@ -196,7 +196,7 @@ dictDescribe d = do
 
 {#fun enchant_broker_list_dicts as _brokerListDicts {id `Broker', withDictDescribeFn* `DictDescribeFn', id `Ptr ()'} -> `()'#}
 
--- | Returns a list of available dictionaries with their details.
+-- | Return a list of available dictionaries with their details.
 brokerListDicts :: Broker -> IO [Provider]
 brokerListDicts d = do
   acc <- newIORef []
