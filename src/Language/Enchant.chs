@@ -45,15 +45,13 @@ module Language.Enchant
   , withDict
   ) where
 
-import Control.Exception
-import Control.Monad
-import Data.IORef
+import Control.Exception (bracket)
+import Data.IORef (newIORef, readIORef, modifyIORef)
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.C.UTF8
 import Foreign.Marshal
 import Foreign.Ptr
-import Foreign.StablePtr
 import Foreign.Storable
 
 data Broker'
