@@ -5,7 +5,7 @@ import Language.Enchant
 import System.Environment
 
 spellCheck :: String -> IO ()
-spellCheck word = withBroker (\broker -> do
+spellCheck word = withBroker (\broker ->
   withDict broker "en_US" (\dict -> do
     putStrLn "Did you mean?"
     suggestions <- dictSuggest dict word
