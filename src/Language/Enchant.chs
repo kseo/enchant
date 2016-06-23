@@ -2,7 +2,17 @@
 
 #include "enchant/enchant.h"
 
--- | Binding to the Enchant library.
+-----------------------------------------------------------------------------
+-- |
+-- Copyright   :  (C) 2016 Kwang Yul Seo
+-- License     :  BSD-style (see the file LICENSE)
+--
+-- Maintainer  :  Kwang Yul Seo <kwangyul.seo@gmail.com>
+-- Stability   :  provisional
+-- Portability :  portable
+--
+-- Binding to the Enchant library.
+----------------------------------------------------------------------------
 module Language.Enchant
   ( Broker
   , brokerDescribe
