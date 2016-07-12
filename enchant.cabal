@@ -10,7 +10,7 @@ maintainer:          kwangyul.seo@gmail.com
 copyright:           2016 Kwang Yul Seo
 category:            Language
 build-type:          Simple
--- extra-source-files:
+extra-source-files:  README.md
 cabal-version:       >=1.10
 
 flag buildExamples
