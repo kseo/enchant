@@ -1,5 +1,6 @@
 # enchant
 
+[![Hackage](https://img.shields.io/hackage/v/enchant.svg?style=flat)](https://hackage.haskell.org/package/enchant)
 [![Build Status](https://travis-ci.org/kseo/enchant.svg?branch=master)](https://travis-ci.org/kseo/enchant)
 
 Haskell Binding to the Enchant library
